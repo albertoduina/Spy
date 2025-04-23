@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.15
+Created-By: 21.0.6+7-LTS (Eclipse Adoptium)
+Built-By: Alberto
+Built-Date: April 23 2025
+Main-Class: Spy.Spy
+Implementation-Version: 2025apr23_0847
+

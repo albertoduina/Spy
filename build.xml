@@ -1,0 +1,231 @@
+<!-- ============================================== -->
+<!-- Ant makefile per Spy 2024-03-16        		-->
+<!-- Presuppone che Spy sia sotto git 				-->
+<!-- ed anche imagej sia sotto git                  -->
+<!-- ============================================== -->
+
+<project name="Spy" default="main">
+	
+	
+	<!-- ===== Ant makefile for spy ===== -->
+	<!-- Definizioni property -->
+	
+    <!-- Percorso base in cui installare il plugin, da aggiornare in caso di spostamenti-->
+    <property name="imagej.plugins.base" location="C:/Programmi2/ImageJ/plugins" />
+	<property name="FIJI.plugins.base" location="C:/Programmi2/FIJI/fiji-win64/Fiji.app/plugins" />
+
+	<property name="imagej.plugins.dir" location="${imagej.plugins.base}/${ant.project.name}" />
+	<property name="FIJI.plugins.dir" location="${FIJI.plugins.base}/${ant.project.name}" />
+	
+	<!-- ====== Percorsi principali del progetto, tutti localizzati automaticamente con basedir ===== -->
+	<property name="source"         location="${basedir}/src/${ant.project.name}" />
+	<property name="output"         location="${basedir}/build" />
+	<property name="dist"  			location="${basedir}/dist" />
+	<property name="data" 			location="${basedir}/data" />
+	<property name="test"           location="${basedir}/test/contMensili" />
+	<!-- ====== Path ij.jar e iw2ayv.jar VERIFICARE ed AGGIORNARE, solo se necessario === -->	
+	<!--property name="repo" 	location="${repository}" /-->
+	<property name="repo" 	location="${basedir}/.." />
+	<property name="pathImageJ" 	location="${repo}/imagej/ij.jar" />
+	<property name="baseIw2ayv" 	location="${repo}/iw2ayv" />
+	<!-- nome del file con wildcards-->
+	<path id="pathIW2AYVxx">
+		<fileset dir="${repo}/iw2ayv/dist/">
+			<include name="iw2ayv*.jar" />
+		</fileset>
+	</path>
+	<property name="pathIW2AYV" refid="pathIW2AYVxx" />
+	<!-- ===== stampa dei valori property ===== -->	
+	<echo message="project name= ${ant.project.name}" />
+	<echo message="basedir= ${basedir}" />
+	<echo message="ant.file= ${ant.file}" />
+	<echo message="source= ${source}" />
+	<echo message="output= ${output}" />
+	<echo message="dist= ${dist}" />
+	<echo message="data= ${data}" />
+	<echo message="test= ${test}" />
+	<echo message="repo= ${repo}" />
+	<echo message="pathImageJ= ${pathImageJ}" />
+	<echo message="baseIw2ayv= ${baseIw2ayv}" />
+	<echo message="pathIW2AYV= ${pathIW2AYV}" />
+	<!-- =============================================" -->
+	
+    <!-- Marca temporale per versionamento -->
+	<tstamp>
+		<format property="time.stamp" pattern="yyyyMMMdd_HHmm" />
+	</tstamp>
+	<echo message="tstamp= ${time.stamp}" />
+
+	
+	<!-- Definizioni property >
+	<property environment="env" />
+	<property name="disk" value="${env.SystemDrive}" />
+
+	<property name="work1" value="${basedir}\.." />
+	<property name="work" location="${work1}" />
+	<echo message="work= ${work}" />
+	<echo message="basedir= ${basedir}" />
+	<echo message="ant.file= ${ant.file}" />
+
+	<property name="user" location="${basedir}\.." />
+	<echo message="user= ${user}" />
+
+	<property name="repo" location="${basedir}\..\..\..\" />
+	<echo message="repo= ${repo}" />
+
+
+	<property name="pathImageJ" location="${repo}\git\imagej1\imagej1\ij.jar" />
+	<echo message="pathImageJ= ${pathImageJ}" />
+	<echo message="DEVE ESSERE= C:\Users\Alberto\Repository\git\imagej1\imagej1\ij.jar" />
+	<property name="dist" location="dist" />
+
+	<property name="productDir" location="${disk}/Programmi2/ImageJ/Plugins/Spy" />
+
+	<property name="output" location="build" />
+	<echo message="output= ${output}" />
+
+	<property name="source" location="src/Spy" />
+	<echo message="source= ${source}" />
+
+	<property name="lib" location="lib" />
+
+
+	<property name="distribuzione" location="distribuzione" />
+
+	<property name="eclipse-home" value="${basedir}\..\.." />
+	<echo message="eclipse-home= ${eclipse-home}" />
+
+	<tstamp>
+		<format property="time.stamp" pattern="yyyyMMMdd_HHmm" />
+	</tstamp>
+	<echo message="tstamp= ${time.stamp}" />
+	<echo message="java version= ${java.version}" />
+	<echo message="java home= ${java.home}" /-->
+	
+
+	
+	
+	<!-- in questo modo posso utilizzare le wildcards per il nome del file-->
+	<!--path id="pathIW2AYVxx"-->
+		<!-- notare che uso "repo" e non "work" CAZZO!!! -->
+		<!--fileset dir="${repo}\git\iw2ayv\iw2ayv\dist\">
+			<include name="iw2ayv*.jar" />
+		</fileset>
+	</path>
+	<property name="pathIW2AYV" refid="pathIW2AYVxx" />
+	<echo message="pathIW2AYV= ${pathIW2AYV}" />
+
+
+	<property name="output" location="build" />
+	<property name="source" location="src" />
+
+	
+	<property name="productDir" location="C:/Programmi/ImageJ/Plugins/Spy" />
+	<property name="pathImageJ" location="../ImageJ/ij.jar" />
+	
+	<property name="output" location="build" /-->
+	
+  
+	<!-- ##############			MAIN ROUTINE 		############## -->
+	<target name="main" 
+		depends="init,
+		compile,
+		 move1,
+		jar,
+		wipe2,
+		cond_WIN7">
+	</target>
+	
+	
+	
+	<!-- INITIALIZE delete and recreate empy directory -->
+	<target name="init" description="Initialize">
+		<echo message=">>> Eseguo INIT inizializzazione cartelle e valori" />
+		<buildnumber />
+		<tstamp />
+		
+		<delete dir="${output}" />
+		<mkdir dir="${output}" />
+
+	</target>
+
+	<!-- COPY1 plugins.config to output -->
+	<target name="copy1" description="copy plugins.config">
+		<copy file="plugins.config" todir="${output}" />
+	</target>
+
+	
+	<!-- COMPILE java classes -->
+	  <target name="compile" description="Compile everything.">
+	    <javac srcdir="." 
+	    	destdir="build" 
+	    	optimize="on" 
+	    	target="1.8" 
+	    	source="1.8" 
+	    	encoding="iso8859-1" 
+	    	debug="on" 
+	    	classpath="${pathImageJ};${pathIW2AYV}"
+	    	>
+	    </javac>
+	  </target>
+	
+	<!-- MOVE1 move the sources into output -->
+	<target name="move1" description="Move the sources.">
+		<copy verbose="true" todir="${output}">
+			<fileset dir="." includes=" *.txt , *.pdf, *.rtf, *.number, *.jpg, *.xml, *.config, *.csv" />
+		</copy>
+	</target >
+	
+	<!-- Create MANIFEST and JARS application  -->
+	<target name="jar" description="JARs the Task">
+		<echo message=">>>> Eseguo CREAZIONE MANIFEST" />
+		<delete file="MANIFEST.MF" />
+		<property name="version.num" value="2.00" />
+		<manifest file="MANIFEST.MF">
+			<attribute name="Built-By" value="Alberto" />
+			<attribute name="Built-Date" value="${TODAY}" />
+			<attribute name="Main-Class" value="Spy.Spy" />
+			<attribute name="Implementation-Version" value="${time.stamp}" />
+		</manifest>
+		
+		<echo message=">>>> Eseguo CREAZIONE JAR" />
+		<jar destfile="${output}/Spy_${time.stamp}.jar" manifest="MANIFEST.MF">
+			<fileset dir="${output}" />
+		</jar>
+		<delete failonerror="false" verbose="true">
+			<fileset dir="${dist}" includes="*.*" />
+		</delete>
+
+		<copy todir="${dist}">
+			<fileset dir="${output}" includes="*.jar" />
+		</copy>
+		<delete dir="${output}/Spy" />
+	</target>
+
+	
+	<!--WIPE2 Delete the jar files into production  -->
+	<target name="wipe2" description="Delete the production *.jar files.">
+		<echo message=">>> Eseguo wipe2" />
+		<delete failonerror="false" verbose="true">
+			<fileset dir="${output}" includes="*.jar" />
+		</delete>
+	</target>
+
+	<target name="cond_WIN7" >
+		<echo message=">>> Eseguo cond_WIN7" />
+		<delete dir="${imagej.plugins.dir}" />
+		<mkdir dir="${imagej.plugins.dir}" />
+
+		<delete failonerror="false" verbose="true">
+			<fileset dir="${imagej.plugins.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</delete>
+
+		<copy todir="${imagej.plugins.dir}">
+			<fileset dir="${dist}" includes="*.jar" />
+		</copy>
+	</target>
+  
+</project>
+
