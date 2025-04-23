@@ -26,11 +26,12 @@
 	<!-- ====== Path ij.jar e iw2ayv.jar VERIFICARE ed AGGIORNARE, solo se necessario === -->	
 	<!--property name="repo" 	location="${repository}" /-->
 	<property name="repo" 	location="${basedir}/.." />
-	<property name="pathImageJ" 	location="${repo}/imagej/ij.jar" />
-	<property name="baseIw2ayv" 	location="${repo}/iw2ayv" />
+	<property name="repo1" 	location="${basedir}/../../" />
+	<property name="pathImageJ" 	location="${repo1}/imagej/ij.jar" />
+	<property name="baseIw2ayv" 	location="${repo1}/iw2ayv" />
 	<!-- nome del file con wildcards-->
 	<path id="pathIW2AYVxx">
-		<fileset dir="${repo}/iw2ayv/dist/">
+		<fileset dir="${repo1}/iw2ayv/dist/">
 			<include name="iw2ayv*.jar" />
 		</fileset>
 	</path>
@@ -45,6 +46,7 @@
 	<echo message="data= ${data}" />
 	<echo message="test= ${test}" />
 	<echo message="repo= ${repo}" />
+	<echo message="repo1= ${repo1}" />
 	<echo message="pathImageJ= ${pathImageJ}" />
 	<echo message="baseIw2ayv= ${baseIw2ayv}" />
 	<echo message="pathIW2AYV= ${pathIW2AYV}" />
