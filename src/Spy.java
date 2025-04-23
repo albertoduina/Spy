@@ -24,6 +24,7 @@ public class Spy implements PlugIn {
 	public static final int STEP = 0;
 
 	public static final int ABORT = -1;
+	
 
 	public int r1;
 
